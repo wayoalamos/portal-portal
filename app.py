@@ -9,7 +9,7 @@ def some_long_calculation(number):
   here will be some long calculation using this number
   let's simulate that using sleep for now :)
   '''
-  time.sleep(1)
+  time.sleep(5)
 
   return number
 
