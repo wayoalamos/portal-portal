@@ -11,6 +11,7 @@ def some_long_calculation(number):
   '''
   time.sleep(5)
 
+
   return number
 
 @app.route('/')
@@ -18,9 +19,10 @@ def check():
     def generate():
         for i in range(10):
             print("jsjs")
-            yield "<br/>"   # notice that we are yielding something as soon as possible
-            yield str(some_long_calculation(i))
-    return Response(generate(), mimetype='text/html')
+            print(some_long_calculation(i))
+            Response("holaa", mimetype='text/html')
+    generate()
+    return Response("chaooo", mimetype='text/html')
 
 
 def check2():
