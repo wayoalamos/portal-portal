@@ -1,38 +1,25 @@
-from flask import Flask, Response, request, make_response, render_template
-import flask_excel as excel
-from openpyxl import Workbook
-import openpyxl
-import pyexcel
+from flask import Flask, Response
+import requests
 
-from search import Search
-# fix dimensiones por la coma que hay se separan en dos valores distintos en el excel
 app = Flask(__name__)
 
+def some_long_calculation(number):
+  '''
+  here will be some long calculation using this number
+  let's simulate that using sleep for now :)
+  '''
+  import time
+  time.sleep(5)
+
+  return number
+
 @app.route('/')
-def homepage():
-    return render_template('index.html')
-
-@app.route("/", methods=["POST"])
-def getPlotCSV():
-    text = request.form['text']
-    url = str(text)
-    s = Search()
-    # https://www.portalinmobiliario.com/venta/casa/las-condes-metropolitana?ca=2&ts=1&mn=2&or=&sf=1&sp=0&at=0&pg=
-    s.find_products(url)
-
-    wb = Workbook()
-    ws = wb.active
-    header=["Tipo", "Categoria", "Ubicacion", "Codigo", "Informacion", "Construido", "Terreno", "Valor(UF)", "UF/Construido", "UF/Terreno", "url"]
-    ws.append(header)
-    for line in s.data:
-        ws.append(line)
-
-    # sheet = pyexcel.Sheet(s.data)
-    output = make_response(openpyxl.writer.excel.save_virtual_workbook(wb))
-    output.headers["Content-Disposition"] = "attachment; filename=export.xlsx"
-    output.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    return output
+def check():
+    output = []
+    for i in range(10):
+      output.append(some_long_calculation(str(i)))
+    html = "<br/>".join(output)
+    return Response(html, mimetype='text/html')
 
 if __name__ == '__main__':
-    excel.init_excel(app)
-    app.run(debug=True, use_reloader=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
